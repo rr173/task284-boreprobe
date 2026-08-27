@@ -1,0 +1,192 @@
+{
+  "project": "task284-boreprobe",
+  "requirement_id": "REQ-20260826-147",
+  "requirement_name": "历史木管乐器内腔修复证据复核台",
+  "project_path": "task0827/task284-boreprobe/env",
+  "baseline_commit": "1ec96637b192a03643a43dc92869712d13f5e0f5",
+  "workflow": "req-pool-codegen",
+  "scope": "健康 Go 项目基线（无 Bug 注入 / 无 author-FIX 派生 / 不出题面 / 不交付）",
+  "generated_by": "workbuddy:task284",
+  "generated_at": "2026-08-27T00:55:00+08:00",
+  "environment": {
+    "go_version": "go1.26.3",
+    "go_mod_version": "1.26.3",
+    "go_bin": "/opt/homebrew/bin/go",
+    "go_toolchain": "local",
+    "go_proxy": "https://goproxy.cn,direct",
+    "go_sumdb": "sum.golang.google.cn",
+    "cgo_enabled": false,
+    "docker_images": {
+      "builder": "golang:1.26.3-bookworm",
+      "runtime": "golang:1.26.3-bookworm"
+    },
+    "target_platforms": ["linux/amd64", "linux/arm64"],
+    "components": {
+      "sqlite": "3.46.1",
+      "modernc.org/sqlite": "v1.52.0"
+    }
+  },
+  "source_scale": {
+    "production_go_files": 25,
+    "production_go_lines": 3457,
+    "test_files": 5,
+    "test_lines": 474,
+    "http_api_count": 26,
+    "sqlite_tables": 8,
+    "business_packages": 7
+  },
+  "source_metrics": {
+    "production_go_files": 25,
+    "production_go_lines": 3457,
+    "test_files": 5
+  },
+  "question_qualification": {
+    "status": "passed",
+    "comparison_corpus": "需求池 REQ-001 至 REQ-157 + task08xx 全量既有项目设计文档",
+    "nearest_requirements": [
+      {
+        "id": "REQ-20260826-087",
+        "name": "木构测绘",
+        "shared_surface": "均为文物构件的几何测量导入与复核",
+        "material_difference": "木构测绘验证构件几何装配；本题关联管腔连续性、补片位置与频响残差",
+        "conclusion": "核心链路不同"
+      },
+      {
+        "id": "REQ-20260826-121",
+        "name": "壁画层位",
+        "shared_surface": "均为文物材料的层位/剖面关系复核",
+        "material_difference": "壁画层位验证材料层位；本题验证修复前后声学响应变化",
+        "conclusion": "核心链路不同"
+      },
+      {
+        "id": "REQ-20260826-118",
+        "name": "乐谱异文",
+        "shared_surface": "均涉及音乐领域符号/版本复核",
+        "material_difference": "乐谱异文比较符号版本；本题比较管腔几何与频响物理量",
+        "conclusion": "核心链路不同"
+      }
+    ],
+    "closest_projects": [
+      {
+        "project": "task232-tonereview / task252-tonereview（濒危语言声调复核台）",
+        "shared_surface": "同为「复核台」形态，均使用声学采样与基频",
+        "material_difference": "其主实体为词条发音与基频轨迹、领域为语言语音学；本题主实体为乐器段/内腔扫描/补片/频响观测，领域为文物乐器修复证据；数据模型、状态机与表结构全部不同",
+        "conclusion": "不构成换皮"
+      },
+      {
+        "project": "task213-crownreview（树冠点云断枝复核台）",
+        "shared_surface": "同为「复核台」形态，均复核扫描数据",
+        "material_difference": "其主实体为 LiDAR 点云与断枝候选；本题为内腔几何与声学响应",
+        "conclusion": "不构成换皮"
+      },
+      {
+        "project": "task220-cavitation（螺旋桨空化声纹判定）",
+        "shared_surface": "均处理声学信号与频谱",
+        "material_difference": "其判定空化声纹；本题比较修复前后频响残差并裁决补片影响",
+        "conclusion": "不构成换皮"
+      }
+    ],
+    "core_loop": "导入测量→对齐内腔段（尺度校正+重叠矛盾检测）→连通性检查（缩窄比+断点）→频响残差比较（音分偏移）→裁决补片影响→发布冻结快照→封存",
+    "state_machine": "project: pending→to_align→to_review→published→sealed；segment: raw→aligned/missing/anomalous→excluded；impact: candidate→none/narrowed/conflict→confirmed；snapshot: draft→shared→frozen→superseded",
+    "storage_and_recovery": "SQLite 8 表；段/频响内容哈希幂等；快照冻结绑定测量基准；smoke-test 关闭重开数据库验证重启恢复；封存校验基准一致",
+    "api_responsibilities": "项目/段/补片/频响/对齐/连通性/比较/影响裁决/快照/封存/统计 26 个 HTTP API，httpapi → service → store 三层调用链",
+    "non_substitutable_difference": "换名词也不能得到既有项目闭环：管腔连通性模拟（轴向缩窄比+断点）、补片越界检查、修复前后频响残差裁决与测量基准冻结是乐器修复领域独有的组合，语言声调/树冠点云/空化声纹均不具备"
+  },
+  "cross_project_similarity_audit": {
+    "status": "passed",
+    "candidate_project": "task284-boreprobe（历史木管乐器内腔修复证据复核台）",
+    "nearest_projects": ["task232-tonereview", "task252-tonereview", "task213-crownreview", "task220-cavitation"],
+    "same_elements": ["SQLite 持久化", "HTTP API 信封格式", "内容哈希幂等", "版本快照冻结"],
+    "different_elements": ["领域模型：乐器段/补片/频响观测 vs 词条基频/点云候选/空化声纹", "状态机：pending→to_align→to_review→published→sealed vs 对应项目状态机", "业务表：segments/patches/responses/impacts vs 其表结构", "核心算法：管腔连通性与频响残差裁决 vs 其判定"],
+    "conclusion": "仅共享通用设施，领域模型、状态机、表与 API 全部不同，不构成换皮"
+  },
+  "requirement_traceability": {
+    "status": "passed",
+    "traces": [
+      {
+        "requirement": "创建修复项目并记录乐器类型与标称内径",
+        "design_section": "§2 业务闭环步骤 1 / §4 API 表",
+        "source_symbols": ["service.Service.CreateProject", "store.DB.CreateProject"],
+        "api": "POST /api/projects",
+        "storage": "projects",
+        "e2e_evidence": "runSmoke 步骤 1"
+      },
+      {
+        "requirement": "导入内腔段并统一尺度",
+        "design_section": "§2 步骤 2 / §4 API 表",
+        "source_symbols": ["service.Service.AddSegment", "store.DB.CreateSegment", "bore.ScaleSegment"],
+        "api": "POST /api/projects/{id}/segments",
+        "storage": "segments",
+        "e2e_evidence": "runSmoke 步骤 2 + TestScaleSegmentCM/TestScaleSegmentUnknownUnit"
+      },
+      {
+        "requirement": "对齐内腔段并检测重叠矛盾",
+        "design_section": "§2 步骤 3 / §5 错误边界",
+        "source_symbols": ["bore.Align", "bore.avgInRange"],
+        "api": "POST /api/projects/{id}/align",
+        "storage": "segments（状态流转）",
+        "e2e_evidence": "TestAlignJoinsSegments/TestAlignOverlapContradict"
+      },
+      {
+        "requirement": "检查管腔连通性（缩窄比与断点）",
+        "design_section": "§2 步骤 3 / §6 场景 4",
+        "source_symbols": ["bore.CheckConnectivity", "bore.medianSpacing", "store.DB.SaveConnectivityReport"],
+        "api": "GET /api/projects/{id}/connectivity",
+        "storage": "connectivity_reports",
+        "e2e_evidence": "TestCheckConnectivityFindsDrop/TestCheckConnectivityDetectsGap + runSmoke 步骤 5"
+      },
+      {
+        "requirement": "比较修复前后频响（音分偏移）",
+        "design_section": "§2 步骤 4 / §6 场景 5",
+        "source_symbols": ["acoustic.CompareResponses", "acoustic.PitchShiftCents", "store.DB.SaveCompareResult"],
+        "api": "POST /api/projects/{id}/compare",
+        "storage": "compare_results",
+        "e2e_evidence": "TestCompareResponsesSignificant + runSmoke 步骤 6"
+      },
+      {
+        "requirement": "裁决补片影响并确认",
+        "design_section": "§2 步骤 5 / §5 并发",
+        "source_symbols": ["impact.Adjudicate", "store.DB.AdjudicateImpact", "store.DB.ConfirmImpact", "bore.PatchInRange"],
+        "api": "POST /api/projects/{id}/impacts, PATCH /api/impacts/{id}",
+        "storage": "impacts（乐观锁版本）",
+        "e2e_evidence": "TestAdjudicateNarrowed/TestImpactVersionConflict + runSmoke 步骤 7"
+      },
+      {
+        "requirement": "发布冻结快照并替代旧版",
+        "design_section": "§2 步骤 6 / §5 不可变快照",
+        "source_symbols": ["snapshot.PublishFrozen", "store.DB.TransitionSnapshot", "store.DB.SupersedeSnapshots"],
+        "api": "POST /api/projects/{id}/snapshots",
+        "storage": "snapshots",
+        "e2e_evidence": "TestSnapshotFrozenLock + runSmoke 步骤 8"
+      },
+      {
+        "requirement": "封存项目并拒绝修改",
+        "design_section": "§3 重启恢复 / §5 状态机流转约束",
+        "source_symbols": ["service.Service.SealProject", "snapshot.VerifyBaseHash", "store.DB.UpdateProjectStatus"],
+        "api": "POST /api/projects/{id}/seal",
+        "storage": "projects（sealed_at）",
+        "e2e_evidence": "TestProjectLifecycle + runSmoke 步骤 10"
+      }
+    ],
+    "blocking_gaps": []
+  },
+  "gate": {
+    "build": "pass",
+    "vet": "pass",
+    "test": "pass",
+    "smoke_test": "pass",
+    "smoke_details": {
+      "project_status_after_restart": "published",
+      "segments_after_restart": 2,
+      "impact_kind": "narrowed",
+      "snapshot_status": "frozen",
+      "final_status": "sealed"
+    }
+  },
+  "qualification": {
+    "forbidden_topic": "passed（主实体为乐器物理测量数据，非流程/任务/工单/OA；页面不安排修复任务）",
+    "well_posed": "passed",
+    "duplication": "passed（排除 task232/252-tonereview、task213-crownreview、task220-cavitation 等近邻）",
+    "template_smell": "passed"
+  }
+}
